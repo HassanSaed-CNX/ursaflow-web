@@ -9,8 +9,11 @@ import {
   BarChart3,
   Archive,
   CheckSquare,
-  Truck,
   AlertTriangle,
+  Bell,
+  Tag,
+  ScanLine,
+  Palette,
   type LucideIcon
 } from 'lucide-react';
 
@@ -50,21 +53,31 @@ export interface NavItem {
 // Actions/permissions
 export type Action = 
   | 'view_dashboard'
+  | 'view_control_tower'
   | 'view_work_orders'
   | 'create_work_order'
   | 'edit_work_order'
   | 'delete_work_order'
+  | 'view_kitting'
+  | 'view_assembly'
+  | 'view_in_process_qc'
   | 'view_inventory'
   | 'manage_inventory'
+  | 'view_test_bench'
   | 'view_test_results'
   | 'submit_test_results'
   | 'approve_test_results'
+  | 'view_final_qc'
+  | 'view_serialization'
   | 'view_packaging'
   | 'process_packaging'
+  | 'view_notifications'
+  | 'view_ncr_capa'
   | 'view_reports'
   | 'manage_users'
   | 'manage_settings'
-  | 'view_spares_aging';
+  | 'view_spares_aging'
+  | 'view_admin';
 
 // Complete role configuration
 export interface RoleConfig {
@@ -83,11 +96,13 @@ export const roleConfigs: Record<Role, RoleConfig> = {
     layoutMode: 'singleScreen',
     navItems: [
       { id: 'work-orders', label: 'Work Orders', path: '/work-orders', icon: ClipboardList },
-      { id: 'inventory', label: 'Inventory', path: '/inventory', icon: Package },
+      { id: 'kitting', label: 'Kitting', path: '/kitting', icon: Package },
+      { id: 'assembly', label: 'Assembly', path: '/assembly', icon: Wrench },
     ],
     allowedActions: [
       'view_work_orders',
-      'view_inventory',
+      'view_kitting',
+      'view_assembly',
     ],
   },
 
@@ -101,6 +116,7 @@ export const roleConfigs: Record<Role, RoleConfig> = {
     ],
     allowedActions: [
       'view_work_orders',
+      'view_test_bench',
       'view_test_results',
       'submit_test_results',
     ],
@@ -111,14 +127,18 @@ export const roleConfigs: Record<Role, RoleConfig> = {
     label: ROLE_LABELS.qa_tech,
     layoutMode: 'singleScreen',
     navItems: [
-      { id: 'qa-review', label: 'QA Review', path: '/qa-review', icon: CheckSquare },
-      { id: 'test-results', label: 'Test Results', path: '/test-results', icon: TestTube },
+      { id: 'in-process-qc', label: 'In-Process QC', path: '/in-process-qc', icon: ScanLine },
+      { id: 'final-qc', label: 'Final QC', path: '/final-qc', icon: CheckSquare },
       { id: 'spares-aging', label: 'Spares AGING', path: '/spares-aging', icon: AlertTriangle },
+      { id: 'ncr-capa', label: 'NCR / CAPA', path: '/ncr-capa', icon: AlertTriangle },
     ],
     allowedActions: [
+      'view_in_process_qc',
+      'view_final_qc',
       'view_test_results',
       'approve_test_results',
       'view_spares_aging',
+      'view_ncr_capa',
     ],
   },
 
@@ -127,10 +147,11 @@ export const roleConfigs: Record<Role, RoleConfig> = {
     label: ROLE_LABELS.packaging,
     layoutMode: 'singleScreen',
     navItems: [
-      { id: 'packaging-queue', label: 'Packaging Queue', path: '/packaging', icon: Archive },
-      { id: 'shipping', label: 'Shipping', path: '/shipping', icon: Truck },
+      { id: 'serialization', label: 'Serialization & Labels', path: '/serialization', icon: Tag },
+      { id: 'packing', label: 'Packing & Handover', path: '/packing-handover', icon: Archive },
     ],
     allowedActions: [
+      'view_serialization',
       'view_packaging',
       'process_packaging',
     ],
@@ -141,23 +162,29 @@ export const roleConfigs: Record<Role, RoleConfig> = {
     label: ROLE_LABELS.supervisor,
     layoutMode: 'sidebar',
     navItems: [
-      { id: 'dashboard', label: 'Dashboard', path: '/', icon: LayoutDashboard },
+      { id: 'control-tower', label: 'Control Tower', path: '/', icon: LayoutDashboard },
       { id: 'work-orders', label: 'Work Orders', path: '/work-orders', icon: ClipboardList },
-      { id: 'inventory', label: 'Inventory', path: '/inventory', icon: Package },
-      { id: 'test-results', label: 'Test Results', path: '/test-results', icon: TestTube },
+      { id: 'kitting', label: 'Kitting', path: '/kitting', icon: Package },
+      { id: 'assembly', label: 'Assembly', path: '/assembly', icon: Wrench },
+      { id: 'test-bench', label: 'Test Bench', path: '/test-bench', icon: TestTube },
+      { id: 'final-qc', label: 'Final QC', path: '/final-qc', icon: CheckSquare },
       { id: 'spares-aging', label: 'Spares AGING', path: '/spares-aging', icon: AlertTriangle },
+      { id: 'notifications', label: 'Notifications', path: '/notifications', icon: Bell },
       { id: 'reports', label: 'Reports', path: '/reports', icon: BarChart3 },
     ],
     allowedActions: [
-      'view_dashboard',
+      'view_control_tower',
       'view_work_orders',
       'create_work_order',
       'edit_work_order',
-      'view_inventory',
-      'manage_inventory',
+      'view_kitting',
+      'view_assembly',
+      'view_test_bench',
       'view_test_results',
       'approve_test_results',
+      'view_final_qc',
       'view_spares_aging',
+      'view_notifications',
       'view_reports',
     ],
   },
@@ -167,33 +194,50 @@ export const roleConfigs: Record<Role, RoleConfig> = {
     label: ROLE_LABELS.admin,
     layoutMode: 'sidebar',
     navItems: [
-      { id: 'dashboard', label: 'Dashboard', path: '/', icon: LayoutDashboard },
+      { id: 'control-tower', label: 'Control Tower', path: '/', icon: LayoutDashboard },
       { id: 'work-orders', label: 'Work Orders', path: '/work-orders', icon: ClipboardList },
-      { id: 'inventory', label: 'Inventory', path: '/inventory', icon: Package },
-      { id: 'maintenance', label: 'Maintenance', path: '/maintenance', icon: Wrench },
-      { id: 'test-results', label: 'Test Results', path: '/test-results', icon: TestTube },
+      { id: 'kitting', label: 'Kitting', path: '/kitting', icon: Package },
+      { id: 'assembly', label: 'Assembly', path: '/assembly', icon: Wrench },
+      { id: 'in-process-qc', label: 'In-Process QC', path: '/in-process-qc', icon: ScanLine },
+      { id: 'test-bench', label: 'Test Bench', path: '/test-bench', icon: TestTube },
+      { id: 'final-qc', label: 'Final QC', path: '/final-qc', icon: CheckSquare },
+      { id: 'serialization', label: 'Serialization', path: '/serialization', icon: Tag },
+      { id: 'packing', label: 'Packing', path: '/packing-handover', icon: Archive },
       { id: 'spares-aging', label: 'Spares AGING', path: '/spares-aging', icon: AlertTriangle },
+      { id: 'ncr-capa', label: 'NCR / CAPA', path: '/ncr-capa', icon: AlertTriangle },
+      { id: 'notifications', label: 'Notifications', path: '/notifications', icon: Bell },
       { id: 'reports', label: 'Reports', path: '/reports', icon: BarChart3 },
       { id: 'users', label: 'Users', path: '/users', icon: Users },
-      { id: 'settings', label: 'Settings', path: '/settings', icon: Settings },
+      { id: 'admin', label: 'Admin', path: '/admin', icon: Settings },
+      { id: 'theme-guide', label: 'Theme Guide', path: '/admin/theme-guide', icon: Palette },
     ],
     allowedActions: [
       'view_dashboard',
+      'view_control_tower',
       'view_work_orders',
       'create_work_order',
       'edit_work_order',
       'delete_work_order',
+      'view_kitting',
+      'view_assembly',
+      'view_in_process_qc',
       'view_inventory',
       'manage_inventory',
+      'view_test_bench',
       'view_test_results',
       'submit_test_results',
       'approve_test_results',
+      'view_final_qc',
+      'view_serialization',
       'view_packaging',
       'process_packaging',
+      'view_notifications',
+      'view_ncr_capa',
       'view_spares_aging',
       'view_reports',
       'manage_users',
       'manage_settings',
+      'view_admin',
     ],
   },
 };
