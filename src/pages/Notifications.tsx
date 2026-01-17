@@ -3,7 +3,7 @@ import { Bell, AlertTriangle, Clock, CheckCircle } from 'lucide-react';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
 import { PageCard } from '@/components/ui/PageCard';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
-import { CustomSkeleton } from '@/components/ui/CustomSkeleton';
+import { Skeleton, SkeletonTable } from '@/components/ui/CustomSkeleton';
 import { NotificationFilters } from '@/components/notifications/NotificationFilters';
 import { NotificationTable } from '@/components/notifications/NotificationTable';
 import { BulkActions } from '@/components/notifications/BulkActions';
@@ -185,14 +185,14 @@ export function Notifications() {
       <PageCard>
         {viewState === 'loading' && (
           <div className="space-y-spacing-md">
-            <CustomSkeleton variant="text" className="h-10 w-full" />
-            <CustomSkeleton variant="table" rows={5} />
+            <Skeleton variant="text" className="h-10 w-full" />
+            <SkeletonTable rows={5} />
           </div>
         )}
         
         {viewState === 'error' && (
           <ErrorBanner
-            type="error"
+            variant="error"
             message={errorMessage}
             onRetry={loadNotifications}
           />
