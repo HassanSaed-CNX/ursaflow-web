@@ -25,6 +25,8 @@ import { NcrCapa } from "./pages/NcrCapa";
 import { Admin } from "./pages/Admin";
 import { ThemeGuide } from "./pages/ThemeGuide";
 import { SparesAging } from "./pages/SparesAging";
+import { QualityModule } from "./pages/QualityModule";
+import { NcrBoardPage } from "./pages/NcrBoard";
 import { PlaceholderPage } from "./pages/PlaceholderPage";
 import NotFound from "./pages/NotFound";
 
@@ -55,6 +57,8 @@ const App = () => (
                 <Route path="/notifications" element={<Notifications />} />
                 <Route path="/approvals" element={<Approvals />} />
                 <Route path="/ncr-capa" element={<NcrCapa />} />
+                <Route path="/quality" element={<QualityModule />} />
+                <Route path="/ncr-board" element={<NcrBoardPage />} />
                 <Route path="/spares-aging" element={<SparesAging />} />
                 
                 {/* Admin Routes */}
