@@ -36,6 +36,9 @@ export const en = {
     selectOption: 'Select an option',
     required: 'Required',
     optional: 'Optional',
+    completed: 'Completed',
+    pending: 'Pending',
+    inProgress: 'In Progress',
   },
 
   // Status chips - exact labels
@@ -55,8 +58,28 @@ export const en = {
   },
 
   // Form labels - exact terms required
-  labels: {
+  fields: {
     mpn: 'MPN #', // Required exact term
+    serialNumber: 'Serial Number',
+    partNumber: 'Part Number',
+    quantity: 'Quantity',
+    description: 'Description',
+    notes: 'Notes',
+    date: 'Date',
+    assignee: 'Assignee',
+    priority: 'Priority',
+    workOrder: 'Work Order',
+    lotNumber: 'Lot Number',
+    batchNumber: 'Batch Number',
+    location: 'Location',
+    station: 'Station',
+    template: 'Template',
+    copies: 'Copies',
+  },
+
+  // Legacy labels alias
+  labels: {
+    mpn: 'MPN #',
     serialNumber: 'Serial Number',
     partNumber: 'Part Number',
     quantity: 'Quantity',
@@ -143,6 +166,42 @@ export const en = {
     admin: 'Admin',
   },
 
+  // Packaging & Serialization
+  packaging: {
+    serialization: 'Serialization & Labels',
+    packingHandover: 'Packing & Handover',
+    printLabel: 'Print Label',
+    labelPreview: 'Label Preview',
+    selectTemplate: 'Select Label Template',
+    checklist: {
+      title: 'Packing Checklist',
+      required: 'required',
+      completedOn: 'Completed on',
+    },
+    printGate: {
+      ready: 'Ready to Print',
+      blocked: 'Printing Blocked',
+      allGatesPassed: 'All gates passed. You can now print labels.',
+      mustComplete: 'The following requirements must be met before printing:',
+      testVerdict: 'Test Verdict',
+      finalQcSign: 'Final QC E-Sign',
+    },
+    documents: {
+      title: 'Document Bundle',
+      coc: 'Certificate of Conformance',
+      testReport: 'Test Report',
+      ppap: 'PPAP Documentation',
+      fair: 'First Article Inspection Report',
+      packingList: 'Packing List',
+    },
+  },
+
+  // Spares
+  spares: {
+    aging: 'AGING', // Required exact term
+    attentionRequired: 'Attention Required',
+    noCritical: 'No critical aging items',
+  },
   // Actions
   actions: {
     createWorkOrder: 'Create Work Order',
