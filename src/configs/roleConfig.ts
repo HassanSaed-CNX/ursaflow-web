@@ -14,6 +14,7 @@ import {
   Tag,
   ScanLine,
   Palette,
+  ClipboardCheck,
   type LucideIcon
 } from 'lucide-react';
 
@@ -127,8 +128,10 @@ export const roleConfigs: Record<Role, RoleConfig> = {
     label: ROLE_LABELS.qa_tech,
     layoutMode: 'singleScreen',
     navItems: [
+      { id: 'quality', label: 'QA Module', path: '/quality', icon: ClipboardCheck },
       { id: 'in-process-qc', label: 'In-Process QC', path: '/in-process-qc', icon: ScanLine },
       { id: 'final-qc', label: 'Final QC', path: '/final-qc', icon: CheckSquare },
+      { id: 'ncr-board', label: 'NCR Board', path: '/ncr-board', icon: AlertTriangle },
       { id: 'spares-aging', label: 'Spares AGING', path: '/spares-aging', icon: AlertTriangle },
       { id: 'ncr-capa', label: 'NCR / CAPA', path: '/ncr-capa', icon: AlertTriangle },
     ],
@@ -167,7 +170,9 @@ export const roleConfigs: Record<Role, RoleConfig> = {
       { id: 'kitting', label: 'Kitting', path: '/kitting', icon: Package },
       { id: 'assembly', label: 'Assembly', path: '/assembly', icon: Wrench },
       { id: 'test-bench', label: 'Test Bench', path: '/test-bench', icon: TestTube },
+      { id: 'quality', label: 'QA Module', path: '/quality', icon: ClipboardCheck },
       { id: 'final-qc', label: 'Final QC', path: '/final-qc', icon: CheckSquare },
+      { id: 'ncr-board', label: 'NCR Board', path: '/ncr-board', icon: AlertTriangle },
       { id: 'spares-aging', label: 'Spares AGING', path: '/spares-aging', icon: AlertTriangle },
       { id: 'notifications', label: 'Notifications', path: '/notifications', icon: Bell },
       { id: 'approvals', label: 'Approvals', path: '/approvals', icon: CheckSquare },
@@ -201,7 +206,9 @@ export const roleConfigs: Record<Role, RoleConfig> = {
       { id: 'assembly', label: 'Assembly', path: '/assembly', icon: Wrench },
       { id: 'in-process-qc', label: 'In-Process QC', path: '/in-process-qc', icon: ScanLine },
       { id: 'test-bench', label: 'Test Bench', path: '/test-bench', icon: TestTube },
+      { id: 'quality', label: 'QA Module', path: '/quality', icon: ClipboardCheck },
       { id: 'final-qc', label: 'Final QC', path: '/final-qc', icon: CheckSquare },
+      { id: 'ncr-board', label: 'NCR Board', path: '/ncr-board', icon: AlertTriangle },
       { id: 'serialization', label: 'Serialization', path: '/serialization', icon: Tag },
       { id: 'packing', label: 'Packing', path: '/packing-handover', icon: Archive },
       { id: 'spares-aging', label: 'Spares AGING', path: '/spares-aging', icon: AlertTriangle },
