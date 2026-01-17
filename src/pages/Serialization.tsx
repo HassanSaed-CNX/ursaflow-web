@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Tag, Printer, Search, Plus, AlertTriangle } from 'lucide-react';
+import { Tag, Printer, Search, AlertTriangle } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Breadcrumbs } from '@/components/ui/Breadcrumbs';
@@ -34,13 +34,15 @@ import {
   TableRow,
 } from '@/components/ui/table';
 import { LabelPreview } from '@/components/packaging/LabelPreview';
-import { PrintGateBanner } from '@/components/packaging/PrintGateBanner';
+import { GateBanner } from '@/components/gates/GateBanner';
+import { useGates } from '@/hooks/useGates';
 import { packagingService } from '@/services/packagingService';
 import { labelPrintFormSchema, LabelPrintFormData } from '@/schemas/packagingSchema';
-import { LabelTemplate, SerialRecord, PrintGateStatus } from '@/types/packaging';
+import { LabelTemplate, SerialRecord } from '@/types/packaging';
 import { useStrings } from '@/i18n/useStrings';
 import { toast } from 'sonner';
 import { format } from 'date-fns';
+import { mockUsers } from '@/mocks/users';
 
 type ViewState = 'loading' | 'error' | 'empty' | 'data';
 
@@ -52,12 +54,25 @@ export function Serialization() {
   const [templates, setTemplates] = useState<LabelTemplate[]>([]);
   const [serialRecords, setSerialRecords] = useState<SerialRecord[]>([]);
   const [selectedTemplate, setSelectedTemplate] = useState<LabelTemplate | null>(null);
-  const [printGateStatus, setPrintGateStatus] = useState<PrintGateStatus | null>(null);
   const [isPrinting, setIsPrinting] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
-  // Selected work order for print gate check
+  // Selected work order for gate checks
   const [selectedWorkOrderId, setSelectedWorkOrderId] = useState('WO-2024-001');
+
+  // Use centralized GateEngine
+  const {
+    gateStatus,
+    isLoading: isGateLoading,
+    refresh: refreshGates,
+    canPerformAction,
+  } = useGates({
+    workOrderId: selectedWorkOrderId,
+    currentUserId: mockUsers.packaging.id,
+    currentStep: 'packing',
+  });
+
+  const canPrint = canPerformAction('print_label');
 
   const form = useForm<LabelPrintFormData>({
     resolver: zodResolver(labelPrintFormSchema),
@@ -72,20 +87,27 @@ export function Serialization() {
   const loadData = useCallback(async () => {
     setViewState('loading');
     try {
-      const [templatesData, recordsData, gateStatus] = await Promise.all([
+      const [templatesData, recordsData] = await Promise.all([
         packagingService.listLabelTemplates(),
         packagingService.listSerialRecords(),
-        packagingService.getPrintGateStatus(selectedWorkOrderId),
       ]);
       setTemplates(templatesData);
       setSerialRecords(recordsData);
-      setPrintGateStatus(gateStatus);
       setViewState(recordsData.length === 0 ? 'empty' : 'data');
     } catch {
       setErrorMessage(t('errors.generic'));
       setViewState('error');
     }
-  }, [t, selectedWorkOrderId]);
+  }, [t]);
+
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
+
+  // Refresh gates when work order changes
+  useEffect(() => {
+    refreshGates();
+  }, [selectedWorkOrderId, refreshGates]);
 
   useEffect(() => {
     loadData();
@@ -100,10 +122,10 @@ export function Serialization() {
     } else {
       setSelectedTemplate(null);
     }
-  }, [form.watch('templateId'), templates]);
+  }, [form, templates]);
 
   const onSubmit = async (data: LabelPrintFormData) => {
-    if (!printGateStatus?.canPrint) {
+    if (!canPrint) {
       toast.error('Cannot print: gates not passed');
       return;
     }
@@ -187,7 +209,7 @@ export function Serialization() {
         <ErrorBanner variant="error" message={errorMessage} onRetry={loadData} />
       )}
 
-      {(viewState === 'data' || viewState === 'empty') && printGateStatus && (
+      {(viewState === 'data' || viewState === 'empty') && gateStatus && (
         <div className="grid lg:grid-cols-2 gap-spacing-lg">
           {/* Left: Print Form */}
           <div className="space-y-spacing-md">
@@ -196,9 +218,14 @@ export function Serialization() {
                 {t('packaging.printLabel')}
               </h2>
 
-              {/* Print Gate Banner */}
+              {/* Gate Banner from GateEngine */}
               <div className="mb-spacing-md">
-                <PrintGateBanner status={printGateStatus} />
+                <GateBanner
+                  gateStatus={gateStatus}
+                  targetAction="print_label"
+                  onRefresh={refreshGates}
+                  isRefreshing={isGateLoading}
+                />
               </div>
 
               {/* Work Order Selector for Demo */}
@@ -227,10 +254,10 @@ export function Serialization() {
                       <FormItem>
                         <FormLabel>{t('fields.serialNumber')}</FormLabel>
                         <FormControl>
-                          <Input
+                        <Input
                             placeholder="SN-2024-XXXXX"
                             {...field}
-                            disabled={!printGateStatus.canPrint}
+                            disabled={!canPrint}
                           />
                         </FormControl>
                         <FormMessage />
@@ -249,7 +276,7 @@ export function Serialization() {
                           <Input
                             placeholder="MPN-XXX-XXXXX"
                             {...field}
-                            disabled={!printGateStatus.canPrint}
+                            disabled={!canPrint}
                             aria-label={t('fields.mpn')}
                           />
                         </FormControl>
@@ -267,7 +294,7 @@ export function Serialization() {
                         <Select
                           onValueChange={field.onChange}
                           value={field.value}
-                          disabled={!printGateStatus.canPrint}
+                          disabled={!canPrint}
                         >
                           <FormControl>
                             <SelectTrigger>
@@ -300,7 +327,7 @@ export function Serialization() {
                             max={100}
                             {...field}
                             onChange={(e) => field.onChange(parseInt(e.target.value) || 1)}
-                            disabled={!printGateStatus.canPrint}
+                            disabled={!canPrint}
                           />
                         </FormControl>
                         <FormMessage />
@@ -311,7 +338,7 @@ export function Serialization() {
                   <Button
                     type="submit"
                     className="w-full"
-                    disabled={!printGateStatus.canPrint || isPrinting}
+                    disabled={!canPrint || isPrinting}
                   >
                     <Printer className="h-4 w-4 mr-2" />
                     {isPrinting ? 'Printing...' : t('packaging.printLabel')}

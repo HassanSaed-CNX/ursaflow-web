@@ -202,6 +202,26 @@ export const en = {
     attentionRequired: 'Attention Required',
     noCritical: 'No critical aging items',
   },
+
+  // Gates
+  gates: {
+    allPassed: 'All Gates Passed',
+    readyToProceed: 'Ready to proceed with this action.',
+    actionBlocked: 'Action Blocked',
+    gatesNotPassed: 'Gates Not Passed',
+    calibrationExpired: 'Calibration Expired',
+    cleanlinessOutOfSpec: 'Cleanliness Out of Spec',
+    serialScansMissing: 'Serial Scans Missing',
+    serialScansDuplicate: 'Duplicate Serial Detected',
+    testVerdictPending: 'Test Verdict Pending',
+    testVerdictFail: 'Test Failed',
+    finalQcNotSigned: 'Final QC Not Signed',
+    sodViolation: 'Separation of Duties Violation',
+    approvalPending: 'Approval Pending',
+    previousStepIncomplete: 'Previous Step Incomplete',
+    requiredDocumentsMissing: 'Required Documents Missing',
+  },
+
   // Actions
   actions: {
     createWorkOrder: 'Create Work Order',
