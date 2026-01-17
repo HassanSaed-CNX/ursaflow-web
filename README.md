@@ -1,73 +1,197 @@
-# Welcome to your Lovable project
+# Industrial MES - Manufacturing Execution System
 
-## Project info
+A frontend-only Manufacturing Execution System (MES) prototype built with React, TypeScript, and Tailwind CSS.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+## Quick Start
 
-## How can I edit this code?
+```bash
+# Install dependencies
+npm install
 
-There are several ways of editing your application.
-
-**Use Lovable**
-
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
-
-Changes made via Lovable will be committed automatically to this repo.
-
-**Use your preferred IDE**
-
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Start development server
 npm run dev
+
+# Build for production
+npm run build
+
+# Run tests
+npm test
 ```
 
-**Edit a file directly in GitHub**
+## Project Structure
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```
+src/
+├── components/          # Reusable UI components
+│   ├── ui/              # Base shadcn/ui components
+│   ├── approvals/       # Approval workflow components
+│   ├── gates/           # Gate check components
+│   ├── notifications/   # Notification components
+│   ├── packaging/       # Packaging & serialization components
+│   ├── quality/         # QC components
+│   └── workOrders/      # Work order components
+├── configs/             # Central configuration
+│   ├── roleConfig.ts    # Roles, nav items, permissions
+│   └── policyConfig.ts  # Policy definitions
+├── contexts/            # React context providers
+│   ├── AuthContext.tsx  # Authentication state
+│   └── ThemeContext.tsx # Theme management
+├── hooks/               # Custom React hooks
+├── i18n/                # Internationalization
+│   └── en.ts            # English strings (all UI text)
+├── layouts/             # Page layouts
+├── mocks/               # Mock data for development
+├── pages/               # Route pages
+├── schemas/             # Zod validation schemas
+├── services/            # API service layer (mock stubs)
+│   └── gates/           # Gate engine logic
+├── styles/              # Global styles
+│   └── tokens.css       # CSS design tokens
+└── types/               # TypeScript type definitions
+```
 
-**Use GitHub Codespaces**
+## Configuration
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+### Role Configuration (`src/configs/roleConfig.ts`)
 
-## What technologies are used for this project?
+Central configuration for all roles, navigation, and permissions:
 
-This project is built with:
+```typescript
+roleConfigs: {
+  operator: { navItems: [...], allowedActions: [...] },
+  test_bench_operator: { ... },
+  qa_tech: { ... },
+  packaging: { ... },
+  supervisor: { ... },
+  admin: { ... },
+}
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+**Roles:**
+- `operator` - Basic work order operations
+- `test_bench_operator` - Test execution
+- `qa_tech` - Quality inspection
+- `packaging` - Serialization and packing
+- `supervisor` - Full operational visibility
+- `admin` - All access + admin tools
 
-## How can I deploy this project?
+### Theme Configuration (`src/styles/tokens.css`)
 
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
+Token-based theming with 3 modes:
 
-## Can I connect a custom domain to my Lovable project?
+| Mode | Description |
+|------|-------------|
+| `corporate-industrial` | Dark header + light content (default) |
+| `dark-compact` | Full dark mode with reduced spacing |
+| `high-contrast` | Maximum accessibility contrast |
 
-Yes, you can!
+**Key Tokens:**
+```css
+--background      /* Page background */
+--surface         /* Card/panel background */
+--header          /* Header background */
+--text            /* Primary text */
+--text-muted      /* Secondary text */
+--accent          /* Primary accent (engineering blue) */
+--success/warning/danger  /* Status colors */
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+### Internationalization (`src/i18n/en.ts`)
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+All user-facing strings in one place:
+
+**Required Exact Terms:**
+- `fields.mpn` → `"MPN #"`
+- `spares.aging` → `"AGING"`
+
+### Mock Data (`src/mocks/`)
+
+Sample data for development:
+- `workOrders.ts` - Work orders
+- `approvals.ts` - Approval requests
+- `notifications.ts` - Notifications
+- `packaging.ts` - Labels, checklists
+- `quality.ts` - QC records
+- `gateEntities.ts` - Gate check entities
+
+### Gate Engine (`src/services/gates/gateEngine.ts`)
+
+Centralized hard-gate logic:
+
+| Gate | Blocks |
+|------|--------|
+| `calibration_expired` | Test start |
+| `cleanliness_out_of_spec` | Step advance |
+| `serial_scans_missing` | Completion |
+| `test_verdict_pending/fail` | Label print |
+| `final_qc_not_signed` | Label print |
+| `sod_violation` | Approval |
+
+## Adding a New Theme
+
+1. **Define tokens in `src/styles/tokens.css`:**
+```css
+[data-theme="my-theme"] {
+  --background: 220 20% 95%;
+  --accent: 180 70% 40%;
+  /* ... other tokens */
+}
+```
+
+2. **Register in `src/contexts/ThemeContext.tsx`:**
+```typescript
+const themes = [
+  // ... existing
+  { value: 'my-theme', label: 'My Theme', description: '...' }
+];
+```
+
+3. Theme automatically available in switcher!
+
+## Key Routes
+
+| Route | Page |
+|-------|------|
+| `/` | Control Tower (dashboard) |
+| `/work-orders` | Work order list |
+| `/work-orders/:id` | Work order detail |
+| `/kitting` | Kit preparation |
+| `/assembly` | Assembly operations |
+| `/test-bench` | Test execution |
+| `/in-process-qc` | In-process QC |
+| `/final-qc` | Final QC sign-off |
+| `/serialization` | Label printing |
+| `/packing-handover` | Pack & ship |
+| `/approvals` | Approval queue |
+| `/notifications` | Notification center |
+| `/quality` | QA module |
+| `/ncr-board` | NCR kanban board |
+| `/spares-aging` | Spares aging tracker |
+| `/admin` | Admin config editor |
+| `/admin/theme-guide` | Theme documentation |
+
+## Quality Standards
+
+- ✅ WCAG AA accessibility
+- ✅ Keyboard navigation with focus management
+- ✅ Zod validation on all forms
+- ✅ Loading, empty, and error states on all routes
+- ✅ Tablet-responsive layouts
+- ✅ i18n-ready (centralized strings)
+- ✅ Config-driven role UI
+
+## Technologies
+
+- **React 18** - UI framework
+- **Vite** - Build tool
+- **TypeScript** - Type safety
+- **Tailwind CSS** - Styling
+- **shadcn/ui** - Component primitives
+- **Zod** - Schema validation
+- **React Router** - Routing
+- **React Query** - Data fetching
+- **Lucide** - Icons
+
+## License
+
+Proprietary - Internal use only
