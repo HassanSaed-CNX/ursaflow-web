@@ -53,6 +53,7 @@ const App = () => (
                 <Route path="/serialization" element={<Serialization />} />
                 <Route path="/packing-handover" element={<PackingHandover />} />
                 <Route path="/notifications" element={<Notifications />} />
+                <Route path="/approvals" element={<Approvals />} />
                 <Route path="/ncr-capa" element={<NcrCapa />} />
                 <Route path="/spares-aging" element={<SparesAging />} />
                 

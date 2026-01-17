@@ -170,6 +170,7 @@ export const roleConfigs: Record<Role, RoleConfig> = {
       { id: 'final-qc', label: 'Final QC', path: '/final-qc', icon: CheckSquare },
       { id: 'spares-aging', label: 'Spares AGING', path: '/spares-aging', icon: AlertTriangle },
       { id: 'notifications', label: 'Notifications', path: '/notifications', icon: Bell },
+      { id: 'approvals', label: 'Approvals', path: '/approvals', icon: CheckSquare },
       { id: 'reports', label: 'Reports', path: '/reports', icon: BarChart3 },
     ],
     allowedActions: [
@@ -206,6 +207,7 @@ export const roleConfigs: Record<Role, RoleConfig> = {
       { id: 'spares-aging', label: 'Spares AGING', path: '/spares-aging', icon: AlertTriangle },
       { id: 'ncr-capa', label: 'NCR / CAPA', path: '/ncr-capa', icon: AlertTriangle },
       { id: 'notifications', label: 'Notifications', path: '/notifications', icon: Bell },
+      { id: 'approvals', label: 'Approvals', path: '/approvals', icon: CheckSquare },
       { id: 'reports', label: 'Reports', path: '/reports', icon: BarChart3 },
       { id: 'users', label: 'Users', path: '/users', icon: Users },
       { id: 'admin', label: 'Admin', path: '/admin', icon: Settings },

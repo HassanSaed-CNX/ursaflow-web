@@ -108,6 +108,7 @@ export const en = {
     serialization: 'Serialization & Labels',
     packingHandover: 'Packing & Handover',
     notifications: 'Notifications & Approvals',
+    approvals: 'Approvals',
     ncrCapa: 'NCR / CAPA',
     admin: 'Admin',
     themeGuide: 'Theme Guide',
@@ -117,6 +118,19 @@ export const en = {
     users: 'Users',
     settings: 'Settings',
     maintenance: 'Maintenance',
+  },
+
+  // Approvals
+  approvals: {
+    title: 'Approval Requests',
+    pending: 'Pending',
+    approved: 'Approved',
+    rejected: 'Rejected',
+    eSign: 'Electronic Signature',
+    attestation: 'I attest that I have reviewed this request and confirm my decision.',
+    typedName: 'Type Your Full Name',
+    sodViolation: 'Separation of Duties: You cannot approve a request you created.',
+    auditTrail: 'Audit Trail',
   },
 
   // Roles
