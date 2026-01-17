@@ -14,71 +14,83 @@ export default {
     },
     extend: {
       colors: {
-        border: "hsl(var(--border))",
-        input: "hsl(var(--input))",
-        ring: "hsl(var(--ring))",
+        // Core semantic colors mapped to CSS variables
         background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
+        surface: "hsl(var(--surface))",
+        header: "hsl(var(--header))",
+        "header-foreground": "hsl(var(--header-foreground))",
+        text: "hsl(var(--text))",
+        "text-muted": "hsl(var(--text-muted))",
+        border: "hsl(var(--border))",
+        "border-strong": "hsl(var(--border-strong))",
+        accent: "hsl(var(--accent))",
+        "accent-foreground": "hsl(var(--accent-foreground))",
+        "accent-hover": "hsl(var(--accent-hover))",
+        success: "hsl(var(--success))",
+        "success-foreground": "hsl(var(--success-foreground))",
+        warning: "hsl(var(--warning))",
+        "warning-foreground": "hsl(var(--warning-foreground))",
+        danger: "hsl(var(--danger))",
+        "danger-foreground": "hsl(var(--danger-foreground))",
+        focus: "hsl(var(--focus))",
+        ring: "hsl(var(--ring))",
+        
+        // Legacy shadcn compatibility
+        foreground: "hsl(var(--text))",
         primary: {
-          DEFAULT: "hsl(var(--primary))",
-          foreground: "hsl(var(--primary-foreground))",
-        },
-        secondary: {
-          DEFAULT: "hsl(var(--secondary))",
-          foreground: "hsl(var(--secondary-foreground))",
-        },
-        destructive: {
-          DEFAULT: "hsl(var(--destructive))",
-          foreground: "hsl(var(--destructive-foreground))",
-        },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
-        },
-        accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
+        secondary: {
+          DEFAULT: "hsl(var(--surface))",
+          foreground: "hsl(var(--text))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--danger))",
+          foreground: "hsl(var(--danger-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--background))",
+          foreground: "hsl(var(--text-muted))",
+        },
         popover: {
-          DEFAULT: "hsl(var(--popover))",
-          foreground: "hsl(var(--popover-foreground))",
+          DEFAULT: "hsl(var(--surface))",
+          foreground: "hsl(var(--text))",
         },
         card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
+          DEFAULT: "hsl(var(--surface))",
+          foreground: "hsl(var(--text))",
         },
+        input: "hsl(var(--border))",
         sidebar: {
-          DEFAULT: "hsl(var(--sidebar-background))",
-          foreground: "hsl(var(--sidebar-foreground))",
-          primary: "hsl(var(--sidebar-primary))",
-          "primary-foreground": "hsl(var(--sidebar-primary-foreground))",
-          accent: "hsl(var(--sidebar-accent))",
-          "accent-foreground": "hsl(var(--sidebar-accent-foreground))",
-          border: "hsl(var(--sidebar-border))",
-          ring: "hsl(var(--sidebar-ring))",
+          DEFAULT: "hsl(var(--header))",
+          foreground: "hsl(var(--header-foreground))",
+          primary: "hsl(var(--accent))",
+          "primary-foreground": "hsl(var(--accent-foreground))",
+          accent: "hsl(var(--surface))",
+          "accent-foreground": "hsl(var(--text))",
+          border: "hsl(var(--border))",
+          ring: "hsl(var(--focus))",
         },
       },
       borderRadius: {
-        lg: "var(--radius)",
-        md: "calc(var(--radius) - 2px)",
-        sm: "calc(var(--radius) - 4px)",
+        lg: "var(--radius-lg)",
+        md: "var(--radius)",
+        sm: "var(--radius-sm)",
+      },
+      boxShadow: {
+        sm: "var(--shadow-sm)",
+        md: "var(--shadow-md)",
+        lg: "var(--shadow-lg)",
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
         },
       },
       animation: {

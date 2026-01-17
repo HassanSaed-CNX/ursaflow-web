@@ -1,98 +1,14 @@
+@import './styles/tokens.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
-@layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
-    --foreground: 210 40% 98%;
-
-    --card: 222.2 84% 4.9%;
-    --card-foreground: 210 40% 98%;
-
-    --popover: 222.2 84% 4.9%;
-    --popover-foreground: 210 40% 98%;
-
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
-
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
-
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
-
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
-
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-}
+/* 
+ * Industrial MES Design System
+ * Token-based theming with 3 modes: Corporate Industrial, Dark Compact, High Contrast
+ * All colors use HSL format for consistency
+ */
 
 @layer base {
   * {
@@ -100,6 +16,84 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-text antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
+
+  /* Focus visible styles for accessibility */
+  :focus-visible {
+    @apply outline-none ring-2 ring-focus ring-offset-2 ring-offset-background;
+  }
+
+  /* Reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  /* Custom spacing utilities using CSS variables */
+  .p-spacing-xs { padding: var(--spacing-xs); }
+  .p-spacing-sm { padding: var(--spacing-sm); }
+  .p-spacing-md { padding: var(--spacing-md); }
+  .p-spacing-lg { padding: var(--spacing-lg); }
+  .p-spacing-xl { padding: var(--spacing-xl); }
+  
+  .px-spacing-xs { padding-left: var(--spacing-xs); padding-right: var(--spacing-xs); }
+  .px-spacing-sm { padding-left: var(--spacing-sm); padding-right: var(--spacing-sm); }
+  .px-spacing-md { padding-left: var(--spacing-md); padding-right: var(--spacing-md); }
+  .px-spacing-lg { padding-left: var(--spacing-lg); padding-right: var(--spacing-lg); }
+  .px-spacing-xl { padding-left: var(--spacing-xl); padding-right: var(--spacing-xl); }
+  
+  .py-spacing-xs { padding-top: var(--spacing-xs); padding-bottom: var(--spacing-xs); }
+  .py-spacing-sm { padding-top: var(--spacing-sm); padding-bottom: var(--spacing-sm); }
+  .py-spacing-md { padding-top: var(--spacing-md); padding-bottom: var(--spacing-md); }
+  .py-spacing-lg { padding-top: var(--spacing-lg); padding-bottom: var(--spacing-lg); }
+  .py-spacing-xl { padding-top: var(--spacing-xl); padding-bottom: var(--spacing-xl); }
+
+  .m-spacing-xs { margin: var(--spacing-xs); }
+  .m-spacing-sm { margin: var(--spacing-sm); }
+  .m-spacing-md { margin: var(--spacing-md); }
+  .m-spacing-lg { margin: var(--spacing-lg); }
+  .m-spacing-xl { margin: var(--spacing-xl); }
+
+  .mb-spacing-xs { margin-bottom: var(--spacing-xs); }
+  .mb-spacing-sm { margin-bottom: var(--spacing-sm); }
+  .mb-spacing-md { margin-bottom: var(--spacing-md); }
+  .mb-spacing-lg { margin-bottom: var(--spacing-lg); }
+  .mb-spacing-xl { margin-bottom: var(--spacing-xl); }
+
+  .mt-spacing-xs { margin-top: var(--spacing-xs); }
+  .mt-spacing-sm { margin-top: var(--spacing-sm); }
+  .mt-spacing-md { margin-top: var(--spacing-md); }
+  .mt-spacing-lg { margin-top: var(--spacing-lg); }
+  .mt-spacing-xl { margin-top: var(--spacing-xl); }
+
+  .gap-spacing-xs { gap: var(--spacing-xs); }
+  .gap-spacing-sm { gap: var(--spacing-sm); }
+  .gap-spacing-md { gap: var(--spacing-md); }
+  .gap-spacing-lg { gap: var(--spacing-lg); }
+  .gap-spacing-xl { gap: var(--spacing-xl); }
+
+  .space-y-spacing-xs > * + * { margin-top: var(--spacing-xs); }
+  .space-y-spacing-sm > * + * { margin-top: var(--spacing-sm); }
+  .space-y-spacing-md > * + * { margin-top: var(--spacing-md); }
+  .space-y-spacing-lg > * + * { margin-top: var(--spacing-lg); }
+  .space-y-spacing-xl > * + * { margin-top: var(--spacing-xl); }
+
+  /* Border radius utilities */
+  .rounded-radius { border-radius: var(--radius); }
+  .rounded-radius-sm { border-radius: var(--radius-sm); }
+  .rounded-radius-lg { border-radius: var(--radius-lg); }
+
+  /* Shadow utilities */
+  .shadow-card { box-shadow: var(--shadow-sm); }
+  .shadow-card-hover { box-shadow: var(--shadow-md); }
+  .shadow-elevated { box-shadow: var(--shadow-lg); }
 }
