@@ -141,6 +141,8 @@ export const en = {
     users: 'Users',
     settings: 'Settings',
     maintenance: 'Maintenance',
+    qualityModule: 'QA Module',
+    ncrBoard: 'NCR Board',
   },
 
   // Approvals
