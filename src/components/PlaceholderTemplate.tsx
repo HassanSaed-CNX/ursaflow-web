@@ -6,7 +6,7 @@ import { BaseButton } from '@/components/BaseButton';
 import { StatusChip } from '@/components/ui/StatusChip';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
-import { SkeletonCard, SkeletonTable } from '@/components/ui/Skeleton';
+import { SkeletonCard, SkeletonTable } from '@/components/ui/CustomSkeleton';
 import { type LucideIcon, RefreshCw } from 'lucide-react';
 
 type ViewState = 'loading' | 'empty' | 'error' | 'data';

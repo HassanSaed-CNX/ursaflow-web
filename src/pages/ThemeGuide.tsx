@@ -7,7 +7,7 @@ import { StatusChip } from '@/components/ui/StatusChip';
 import { Modal } from '@/components/ui/Modal';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { ErrorBanner } from '@/components/ui/ErrorBanner';
-import { SkeletonCard, SkeletonTable, Skeleton } from '@/components/ui/Skeleton';
+import { SkeletonCard, SkeletonTable, Skeleton } from '@/components/ui/CustomSkeleton';
 import { DataTable } from '@/components/ui/DataTable';
 import { useStrings } from '@/i18n/useStrings';
 import { useTheme } from '@/contexts/ThemeContext';
