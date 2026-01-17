@@ -3,6 +3,7 @@ import { ESignFormData } from '@/schemas/approvalSchema';
 import { getApprovalStore, updateApprovalInStore, CURRENT_USER_ID } from '@/mocks/approvals';
 import { mockUsers } from '@/mocks/users';
 import { canUserApprove } from '@/configs/policyConfig';
+import { checkSodForApproval } from '@/services/gates/gateEngine';
 
 // Simulated API delay
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
@@ -70,10 +71,25 @@ export const approvalService = {
   },
 
   // Check Separation of Duties before approval
+  // Uses centralized GateEngine check
   checkSoD(approval: ApprovalRequest, currentUserId: string): SoDCheckResult {
-    const allowed = canUserApprove(approval.requestedByUserId, currentUserId);
+    // Use centralized gate engine for SoD check
+    const gateResult = checkSodForApproval(
+      approval.requestedByUserId,
+      currentUserId,
+      true // preventSelfApproval from policyConfig
+    );
     
-    if (!allowed) {
+    if (!gateResult.allowed) {
+      return {
+        allowed: false,
+        reason: gateResult.reason || 'Separation of Duties violation',
+      };
+    }
+    
+    // Also check using policy config as backup
+    const policyAllowed = canUserApprove(approval.requestedByUserId, currentUserId);
+    if (!policyAllowed) {
       return {
         allowed: false,
         reason: 'Separation of Duties: You cannot approve a request you created.',

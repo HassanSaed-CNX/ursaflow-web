@@ -19,11 +19,14 @@ import { EmptyState } from '@/components/ui/EmptyState';
 import { Modal } from '@/components/ui/Modal';
 import { SkeletonCard } from '@/components/ui/CustomSkeleton';
 import { WorkOrderStepper } from '@/components/workOrders/WorkOrderStepper';
-import { GateBanner } from '@/components/workOrders/GateBanner';
+import { GateBanner as LegacyGateBanner } from '@/components/workOrders/GateBanner';
+import { GateBanner } from '@/components/gates/GateBanner';
+import { useGates } from '@/hooks/useGates';
 import { workOrderService } from '@/services/workOrderService';
 import { WorkOrder } from '@/types/workOrder';
 import { useStrings } from '@/i18n/useStrings';
 import { cn } from '@/lib/utils';
+import { mockUsers } from '@/mocks/users';
 
 const statusMap: Record<string, 'pending' | 'inProgress' | 'hold' | 'complete' | 'fail'> = {
   'pending': 'pending',
@@ -45,6 +48,21 @@ export function WorkOrderDetail() {
   const [isAdvancing, setIsAdvancing] = useState(false);
   const [showNcrModal, setShowNcrModal] = useState(false);
   const [showHelpModal, setShowHelpModal] = useState(false);
+
+  // Use centralized GateEngine
+  const currentStep = workOrder?.routing.find(s => s.id === workOrder?.currentStepId);
+  const {
+    gateStatus,
+    isLoading: isGateLoading,
+    refresh: refreshGates,
+    canPerformAction,
+  } = useGates({
+    workOrderId: id || '',
+    currentUserId: mockUsers.supervisor.id,
+    currentStep: currentStep?.name?.toLowerCase().replace(/\s+/g, '_'),
+  });
+
+  const canAdvance = canPerformAction('complete_step') && canPerformAction('proceed_next_step');
 
   const fetchWorkOrder = async () => {
     if (!id) return;
@@ -78,6 +96,7 @@ export function WorkOrderDetail() {
       const response = await workOrderService.advanceStep(workOrder.id);
       if (response.data) {
         setWorkOrder(response.data);
+        refreshGates(); // Refresh gates after step change
       }
     } catch (err) {
       setError('Failed to advance step');
@@ -113,8 +132,10 @@ export function WorkOrderDetail() {
     );
   }
 
-  const currentStep = workOrder.routing.find(s => s.id === workOrder.currentStepId);
-  const hasGates = Object.values(workOrder.gateFlags).some(Boolean);
+  const activeStep = workOrder.routing.find(s => s.id === workOrder.currentStepId);
+  const hasLegacyGates = Object.values(workOrder.gateFlags).some(Boolean);
+  const hasGateEngineGates = gateStatus && !gateStatus.allPassed;
+  const hasAnyGates = hasLegacyGates || hasGateEngineGates;
   const isComplete = workOrder.status === 'complete';
   const isFailed = workOrder.status === 'failed';
   const isOnHold = workOrder.status === 'on_hold';
@@ -171,9 +192,19 @@ export function WorkOrderDetail() {
         </div>
       </div>
 
-      {/* Gate Banners */}
-      {hasGates && (
-        <GateBanner flags={workOrder.gateFlags} />
+      {/* Gate Banners - GateEngine (primary) */}
+      {gateStatus && !gateStatus.allPassed && (
+        <GateBanner
+          gateStatus={gateStatus}
+          showAllGates
+          onRefresh={refreshGates}
+          isRefreshing={isGateLoading}
+        />
+      )}
+
+      {/* Legacy Gate Banners (from work order flags) */}
+      {hasLegacyGates && (
+        <LegacyGateBanner flags={workOrder.gateFlags} />
       )}
 
       {/* Summary Card */}
@@ -207,10 +238,10 @@ export function WorkOrderDetail() {
       <PageCard>
         <div className="flex items-center justify-between mb-spacing-lg">
           <h2 className="text-lg font-semibold text-text">Routing Progress</h2>
-          {currentStep && !isComplete && !isFailed && (
+          {activeStep && !isComplete && !isFailed && (
             <div className="flex items-center gap-spacing-sm">
               <span className="text-sm text-text-muted">
-                Current: <span className="text-accent font-medium">{currentStep.name}</span>
+                Current: <span className="text-accent font-medium">{activeStep.name}</span>
               </span>
             </div>
           )}
@@ -229,11 +260,11 @@ export function WorkOrderDetail() {
               onClick={handleAdvanceStep}
               isLoading={isAdvancing}
               leftIcon={<Play className="h-4 w-4" />}
-              disabled={hasGates}
+              disabled={!canAdvance || hasLegacyGates}
             >
-              Complete {currentStep?.name} & Advance
+              Complete {activeStep?.name} & Advance
             </BaseButton>
-            {hasGates && (
+            {(!canAdvance || hasLegacyGates) && (
               <p className="text-xs text-warning mt-spacing-sm">
                 Resolve gate issues before advancing
               </p>
