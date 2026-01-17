@@ -10,6 +10,8 @@ import { AppLayout } from "@/layouts/AppLayout";
 // Pages
 import { ControlTower } from "./pages/ControlTower";
 import { WorkOrders } from "./pages/WorkOrders";
+import { WorkOrderDetail } from "./pages/WorkOrderDetail";
+import { MyWork } from "./pages/MyWork";
 import { Kitting } from "./pages/Kitting";
 import { Assembly } from "./pages/Assembly";
 import { InProcessQC } from "./pages/InProcessQC";
@@ -40,6 +42,8 @@ const App = () => (
                 {/* Main Routes */}
                 <Route path="/" element={<ControlTower />} />
                 <Route path="/work-orders" element={<WorkOrders />} />
+                <Route path="/work-orders/:id" element={<WorkOrderDetail />} />
+                <Route path="/my-work" element={<MyWork />} />
                 <Route path="/kitting" element={<Kitting />} />
                 <Route path="/assembly" element={<Assembly />} />
                 <Route path="/in-process-qc" element={<InProcessQC />} />
