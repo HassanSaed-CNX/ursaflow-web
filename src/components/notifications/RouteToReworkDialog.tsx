@@ -81,10 +81,9 @@ export function RouteToReworkDialog({
   
   return (
     <Modal
-      open={open}
+      isOpen={open}
       onClose={handleClose}
       title="Route to Rework"
-      size="md"
     >
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-spacing-md">
         {/* Notification summary */}

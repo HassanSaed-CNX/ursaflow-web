@@ -89,7 +89,6 @@ function NotificationRow({
         <div className="flex items-start gap-spacing-sm">
           <StatusChip 
             status={severityToStatus[notification.severity]} 
-            size="sm"
           />
           <div className="min-w-0">
             <p className={cn(
@@ -136,13 +135,13 @@ function NotificationRow({
       <td className="px-spacing-sm py-spacing-sm">
         <div className="flex items-center gap-1">
           {notification.channels.inApp && (
-            <Bell className="h-4 w-4 text-text-muted" title="In-App" />
+            <Bell className="h-4 w-4 text-text-muted" aria-label="In-App" />
           )}
           {notification.channels.email && (
-            <Mail className="h-4 w-4 text-text-muted" title="Email" />
+            <Mail className="h-4 w-4 text-text-muted" aria-label="Email" />
           )}
           {notification.channels.teams && (
-            <MessageSquare className="h-4 w-4 text-text-muted" title="Teams" />
+            <MessageSquare className="h-4 w-4 text-text-muted" aria-label="Teams" />
           )}
         </div>
       </td>
@@ -155,7 +154,6 @@ function NotificationRow({
             notification.status === 'acknowledged' ? 'pass' : 
             'complete'
           } 
-          size="sm"
         />
       </td>
       

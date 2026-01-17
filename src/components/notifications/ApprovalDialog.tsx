@@ -66,10 +66,9 @@ export function ApprovalDialog({
   
   return (
     <Modal
-      open={open}
+      isOpen={open}
       onClose={handleClose}
       title={`${title} Notification`}
-      size="md"
     >
       <form onSubmit={handleSubmit(handleFormSubmit)} className="space-y-spacing-md">
         {/* Notification summary */}
